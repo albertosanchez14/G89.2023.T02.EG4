@@ -53,10 +53,11 @@ class OrderManager:
         res = myregex.fullmatch(t_c)
         if not res:
             raise OrderManagementException("tracking_code format is not valid")
-    
+
     @staticmethod
-    def save_store(data, path):
-        file_store = JSON_FILES_PATH + path
+    def save_store(data):
+        """Method for saving the orders store"""
+        file_store = JSON_FILES_PATH + "orders_store.json"
         # first read the file
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
@@ -67,22 +68,54 @@ class OrderManager:
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
 
-        if path == "orders_store.json":
-            found = False
-            for item in data_list:
-                if item["_OrderRequest__order_id"] == data.order_id:
-                    found = True
-            if found is False:
-                data_list.append(data.__dict__)
-            else:
-                raise OrderManagementException("order_id is already registered in orders_store")
-        
+        found = False
+        for item in data_list:
+            if item["_OrderRequest__order_id"] == data.order_id:
+                found = True
+        if found is False:
+            data_list.append(data.__dict__)
+        else:
+            raise OrderManagementException("order_id is already registered in orders_store")
+
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
         return True
+
+    @staticmethod
+    def save_fast(data):
+        """Method for saving the orders store"""
+        orders_store = JSON_FILES_PATH + "orders_store.json"
+        with open(orders_store, "r+", encoding="utf-8", newline="") as file:
+            data_list = json.load(file)
+            data_list.append(data.__dict__)
+            file.seek(0)
+            json.dump(data_list, file, indent=2)
+
+    @staticmethod
+    def save_orders_shipped(shipment):
+        """Saves the shipping object into a file"""
+        shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
+        # first read the file
+        try:
+            with open(shimpents_store_file, "r", encoding="utf-8", newline="") as file:
+                data_list = json.load(file)
+        except FileNotFoundError:
+            # file is not found , so  init my data_list
+            data_list = []
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
+        # append the shipments list
+        data_list.append(shipment.__dict__)
+
+        try:
+            with open(shimpents_store_file, "w", encoding="utf-8", newline="") as file:
+                json.dump(data_list, file, indent=2)
+        except FileNotFoundError as ex:
+            raise OrderManagementException("Wrong file or file path") from ex
 
     # pylint: disable=too-many-arguments
     def register_order(self, product_id,
@@ -102,19 +135,23 @@ class OrderManager:
         if not res:
             raise OrderManagementException("address is not valid")
 
+        """
         myregex = re.compile(r"^(\+)[0-9]{11}")
         res = myregex.fullmatch(phone_number)
         if not res:
             raise OrderManagementException("phone number is not valid")
+        """
+
         if zip_code.isnumeric() and len(zip_code) == 5:
             if int(zip_code) > 52999 or int(zip_code) < 1000:
                 raise OrderManagementException("zip_code is not valid")
         else:
             raise OrderManagementException("zip_code format is not valid")
+
         if self.validate_ean13(product_id):
             my_order = OrderRequest(product_id,
                                     order_type,
-                                    address,
+                                    address,y
                                     phone_number,
                                     zip_code)
 
@@ -239,3 +276,4 @@ class OrderManager:
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
         return True
+
