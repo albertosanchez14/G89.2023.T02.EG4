@@ -2,7 +2,7 @@
 from datetime import datetime
 import hashlib
 
-#pylint: disable=too-many-instance-attributes
+#pylint: disable=too-many-instance-validation
 class OrderShipping():
     """Class representing the shipping of an order"""
 

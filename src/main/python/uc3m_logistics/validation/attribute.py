@@ -11,16 +11,11 @@ class Attribute:
         self._error_message = ""
 
     def _validate(self, value):
-        print(self._validation_pattern)
         regex = re.compile(self._validation_pattern)
         res = regex.fullmatch(value)
         if not res:
             raise OrderManagementException(self._error_message)
         return value
-
-    def hola(self):
-        """fawdfawf"""
-        return None
 
     @property
     def value(self):

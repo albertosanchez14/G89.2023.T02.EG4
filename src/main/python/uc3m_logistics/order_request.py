@@ -3,6 +3,10 @@ import hashlib
 import json
 from datetime import datetime
 from .validation.phone_number_attribute import PhoneNumberAttribute
+from .validation.order_type_attribute import OrderTypeAttribute
+from .validation.delivery_address_attribute import DeliveryAddressAttribute
+from .validation.zip_code_attribute import ZipCodeAttribute
+from .validation.product_id_attribute import ProductIdAttribute
 
 
 class OrderRequest:
@@ -10,12 +14,12 @@ class OrderRequest:
     # pylint: disable=too-many-arguments
     def __init__(self, product_id, order_type,
                  delivery_address, phone_number, zip_code):
-        self.__product_id = product_id
-        self.__delivery_address = delivery_address
+        self.__product_id = ProductIdAttribute(product_id).value
+        self.__delivery_address = DeliveryAddressAttribute(delivery_address).value
         # for this use an abstract class
-        self.__order_type = order_type
-        self.__phone_number = PhoneNumberAttribute(phone_number)
-        self.__zip_code = zip_code
+        self.__order_type = OrderTypeAttribute(order_type).value
+        self.__phone_number = PhoneNumberAttribute(phone_number).value
+        self.__zip_code = ZipCodeAttribute(zip_code).value
         justnow = datetime.utcnow()
         self.__time_stamp = datetime.timestamp(justnow)
         self.__order_id = hashlib.md5(self.__str__().encode()).hexdigest()
@@ -31,7 +35,7 @@ class OrderRequest:
 
     @delivery_address.setter
     def delivery_address(self, value):
-        self.__delivery_address = value
+        self.__delivery_address = DeliveryAddressAttribute(value).value
 
     @property
     def order_type(self):
@@ -40,9 +44,7 @@ class OrderRequest:
 
     @order_type.setter
     def order_type(self, value):
-        # if we put an abstract class in order_type
-        # you should also return the abstract class
-        self.__order_type = value
+        self.__order_type = OrderTypeAttribute(value).value
 
     @property
     def phone_number(self):
@@ -51,7 +53,7 @@ class OrderRequest:
 
     @phone_number.setter
     def phone_number(self, value):
-        self.__phone_number = value
+        self.__phone_number = PhoneNumberAttribute(value).value
 
     @property
     def product_id(self):
@@ -60,7 +62,7 @@ class OrderRequest:
 
     @product_id.setter
     def product_id(self, value):
-        self.__product_id = value
+        self.__product_id = ProductIdAttribute(value).value
 
     @property
     def time_stamp(self):
@@ -76,3 +78,7 @@ class OrderRequest:
     def zip_code(self):
         """Returns the order's zip_code"""
         return self.__zip_code
+    
+    @zip_code.setter
+    def zip_code(self, value):
+        self.__zip_code = ZipCodeAttribute(value).value

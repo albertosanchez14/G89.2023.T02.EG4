@@ -17,36 +17,6 @@ class OrderManager:
         pass
 
     @staticmethod
-    def validate_ean13(ean13):
-        """method vor validating a ean13 code"""
-        # PLEASE INCLUDE HERE THE CODE FOR VALIDATING THE EAN13
-        # RETURN TRUE IF THE EAN13 IS RIGHT, OR FALSE IN OTHER CASE
-        checksum = 0
-        code_read = -1
-        res = False
-        regex_ean13 = re.compile("^[0-9]{13}$")
-        valid_ean13_format = regex_ean13.fullmatch(ean13)
-        if valid_ean13_format is None:
-            raise OrderManagementException("Invalid EAN13 code string")
-
-        for i, digit in enumerate(reversed(ean13)):
-            try:
-                current_digit = int(digit)
-            except ValueError as v_e:
-                raise OrderManagementException("Invalid EAN13 code string") from v_e
-            if i == 0:
-                code_read = current_digit
-            else:
-                checksum += (current_digit) * 3 if (i % 2 != 0) else current_digit
-        control_digit = (10 - (checksum % 10)) % 10
-
-        if (code_read != -1) and (code_read == control_digit):
-            res = True
-        else:
-            raise OrderManagementException("Invalid EAN13 control digit")
-        return res
-
-    @staticmethod
     def validate_tracking_code(t_c):
         """Method for validating sha256 values"""
         myregex = re.compile(r"[0-9a-fA-F]{64}$")
@@ -125,33 +95,9 @@ class OrderManager:
                        zip_code):
         """Register the orders into the order's file"""
 
-        myregex = re.compile(r"(Regular|Premium)")
-        res = myregex.fullmatch(order_type)
-        if not res:
-            raise OrderManagementException("order_type is not valid")
-
-        myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
-        res = myregex.fullmatch(address)
-        if not res:
-            raise OrderManagementException("address is not valid")
-
-        """
-        myregex = re.compile(r"^(\+)[0-9]{11}")
-        res = myregex.fullmatch(phone_number)
-        if not res:
-            raise OrderManagementException("phone number is not valid")
-        """
-
-        if zip_code.isnumeric() and len(zip_code) == 5:
-            if int(zip_code) > 52999 or int(zip_code) < 1000:
-                raise OrderManagementException("zip_code is not valid")
-        else:
-            raise OrderManagementException("zip_code format is not valid")
-
-        if self.validate_ean13(product_id):
-            my_order = OrderRequest(product_id,
+        my_order = OrderRequest(product_id,
                                     order_type,
-                                    address,y
+                                    address,
                                     phone_number,
                                     zip_code)
 
@@ -204,7 +150,7 @@ class OrderManager:
                 order_timestamp = item["_OrderRequest__time_stamp"]
                 zip_code = item["_OrderRequest__zip_code"]
                 # set the time when the order was registered for checking the md5
-                with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
+                with freeze_time(datetime.  fromtimestamp(order_timestamp).date()):
                     order = OrderRequest(product_id=proid,
                                          delivery_address=address,
                                          order_type=reg_type,
