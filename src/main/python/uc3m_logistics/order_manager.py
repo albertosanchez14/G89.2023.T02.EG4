@@ -29,6 +29,7 @@ class OrderManager:
         """Method for saving the orders store"""
         file_store = JSON_FILES_PATH + "orders_store.json"
         # first read the file
+        #load
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
@@ -37,7 +38,7 @@ class OrderManager:
             data_list = []
         except json.JSONDecodeError as ex:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
-
+        # found
         found = False
         for item in data_list:
             if item["_OrderRequest__order_id"] == data.order_id:
@@ -46,7 +47,7 @@ class OrderManager:
             data_list.append(data.__dict__)
         else:
             raise OrderManagementException("order_id is already registered in orders_store")
-
+        #save
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
