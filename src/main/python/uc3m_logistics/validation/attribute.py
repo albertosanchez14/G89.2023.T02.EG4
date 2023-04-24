@@ -1,27 +1,15 @@
-"""Module"""
-import re
-from ..order_management_exception import OrderManagementException
+from abc import ABC, abstractmethod
 
 
-class Attribute:
-    """Docstring"""
-    def __init__(self):
-        self._attr_value = ""
-        self._validation_pattern = r""
-        self._error_message = ""
+class Attribute(ABC):
+    def __init__(self, value):
+        self._value = self.validate(value)
 
-    def _validate(self, value):
-        regex = re.compile(self._validation_pattern)
-        res = regex.fullmatch(value)
-        if not res:
-            raise OrderManagementException(self._error_message)
-        return value
+    @abstractmethod
+    def validate(self, value):
+        pass
 
     @property
+    @abstractmethod
     def value(self):
-        """adwdawd"""
-        return self._attr_value
-
-    @value.setter
-    def value(self, attr_value):
-        self._attr_value = attr_value
+        return self._value
