@@ -24,7 +24,6 @@ class ProductIdAttribute(Attribute):
             else:
                 checksum += current_digit * 3 if (i % 2 != 0) else current_digit
         control_digit = (10 - (checksum % 10)) % 10
-
         if (code_read != -1) and (code_read == control_digit):
             res = True
         else:

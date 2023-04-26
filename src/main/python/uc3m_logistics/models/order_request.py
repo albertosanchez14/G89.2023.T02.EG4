@@ -2,11 +2,12 @@
 import hashlib
 import json
 from datetime import datetime
-from .validation.phone_number_attribute import PhoneNumberAttribute
-from .validation.order_type_attribute import OrderTypeAttribute
-from .validation.delivery_address_attribute import DeliveryAddressAttribute
-from .validation.zip_code_attribute import ZipCodeAttribute
-from .validation.product_id_attribute import ProductIdAttribute
+from uc3m_logistics.validation.phone_number_attribute import PhoneNumberAttribute
+from uc3m_logistics.validation.order_type_attribute import OrderTypeAttribute
+from uc3m_logistics.validation.delivery_address_attribute import DeliveryAddressAttribute
+from uc3m_logistics.validation.zip_code_attribute import ZipCodeAttribute
+from uc3m_logistics.validation.product_id_attribute import ProductIdAttribute
+from stores.order_request_store import OrderRequestStore
 
 
 class OrderRequest:
@@ -26,6 +27,10 @@ class OrderRequest:
 
     def __str__(self):
         return "OrderRequest:" + json.dumps(self.__dict__)
+
+    def save_to_store(self):
+        """Method for saving the order request to the store"""
+        OrderRequestStore().add_item(self)
 
     @property
     def delivery_address(self):

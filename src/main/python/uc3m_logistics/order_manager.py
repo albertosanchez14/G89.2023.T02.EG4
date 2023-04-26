@@ -4,10 +4,11 @@ import re
 import json
 from datetime import datetime
 from freezegun import freeze_time
-from .order_request import OrderRequest
+from .models.order_request import OrderRequest
 from .order_management_exception import OrderManagementException
-from .order_shipping import OrderShipping
+from .models.order_shipping import OrderShipping
 from .order_manager_config import JSON_FILES_PATH
+from .singleton_metaclass import SingletonMetaClass
 
 
 class OrderManager:
