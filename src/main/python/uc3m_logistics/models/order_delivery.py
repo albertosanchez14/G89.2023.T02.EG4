@@ -34,4 +34,4 @@ class OrderDelivery:
         delivery_date = datetime.fromtimestamp(order_shipping["_OrderShipping__delivery_day"]).date()
         if delivery_date != today:
             raise OrderManagementException("Today is not the delivery date")
-        return order_shipping
+        return OrderDelivery(tracking_code=tracking_code)

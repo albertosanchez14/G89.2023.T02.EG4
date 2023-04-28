@@ -1,8 +1,6 @@
 """Module """
-import datetime
 import re
 import json
-from datetime import datetime
 from .models.order_delivery import OrderDelivery
 from .models.order_request import OrderRequest
 from .order_management_exception import OrderManagementException
@@ -115,51 +113,6 @@ class OrderManager(metaclass=SingletonMetaClass):
     @staticmethod
     def deliver_product(tracking_code):
         """Register the delivery of the product"""
-        """self.validate_tracking_code(tracking_code)
-
-        # check if this tracking_code is in shipments_store
-        shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
-        # first read the file
-        try:
-            with open(shimpents_store_file, "r", encoding="utf-8", newline="") as file:
-                data_list = json.load(file)
-        except json.JSONDecodeError as ex:
-            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
-        except FileNotFoundError as ex:
-            raise OrderManagementException("shipments_store not found") from ex
-        # search this tracking_code
-        found = False
-        for item in data_list:
-            if item["_OrderShipping__tracking_code"] == tracking_code:
-                found = True
-                del_timestamp = item["_OrderShipping__delivery_day"]
-        if not found:
-            raise OrderManagementException("tracking_code is not found")
-
-        today = datetime.today().date()
-        delivery_date = datetime.fromtimestamp(del_timestamp).date()
-        if delivery_date != today:
-            raise OrderManagementException("Today is not the delivery date")
-
-        shipments_file = JSON_FILES_PATH + "shipments_delivered.json"
-        try:
-            with open(shipments_file, "r", encoding="utf-8", newline="") as file:
-                data_list = json.load(file)
-        except FileNotFoundError as ex:
-            # file is not found , so  init my data_list
-            data_list = []
-        except json.JSONDecodeError as ex:
-            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
-
-        # append the delivery info
-        data_list.append(str(tracking_code))
-        data_list.append(str(datetime.utcnow()))
-        try:
-            with open(shipments_file, "w", encoding="utf-8", newline="") as file:
-                json.dump(data_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise OrderManagementException("Wrong file or file path") from ex"""
-
         order_delivery = OrderDelivery.from_order_tracking_code(tracking_code)
         order_delivery.save_to_store()
         return True
