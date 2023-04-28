@@ -1,10 +1,15 @@
-"Docstring"
+"""Docstring"""
 import json
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, ABCMeta
+from uc3m_logistics.singleton_metaclass import SingletonMetaClass
 from ..order_management_exception import OrderManagementException
 
 
-class JsonStore(ABC):
+class FinalMetaClass(ABCMeta, SingletonMetaClass):
+    pass
+
+
+class JsonStore(ABC, metaclass=FinalMetaClass):
     _FILE_PATH = ""
 
     def __init__(self):
@@ -47,4 +52,4 @@ class JsonStore(ABC):
     @data.setter
     def data(self, value):
         self.__data = value
-        self.save()
+        self.save_store()

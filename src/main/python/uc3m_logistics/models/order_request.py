@@ -7,7 +7,9 @@ from uc3m_logistics.validation.order_type_attribute import OrderTypeAttribute
 from uc3m_logistics.validation.delivery_address_attribute import DeliveryAddressAttribute
 from uc3m_logistics.validation.zip_code_attribute import ZipCodeAttribute
 from uc3m_logistics.validation.product_id_attribute import ProductIdAttribute
-from stores.order_request_store import OrderRequestStore
+from uc3m_logistics.stores.order_request_store import OrderRequestStore
+import time
+from freezegun import freeze_time
 
 
 class OrderRequest:
@@ -83,7 +85,7 @@ class OrderRequest:
     def zip_code(self):
         """Returns the order's zip_code"""
         return self.__zip_code
-    
+
     @zip_code.setter
     def zip_code(self, value):
         self.__zip_code = ZipCodeAttribute(value).value

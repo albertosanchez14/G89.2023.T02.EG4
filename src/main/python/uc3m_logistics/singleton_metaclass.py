@@ -1,7 +1,7 @@
 """Docstring"""
 
 
-class SingletonMeta(type):
+class SingletonMetaClass(type):
     _isinstances = {}
 
     def __call__(cls, *args, **kwargs):

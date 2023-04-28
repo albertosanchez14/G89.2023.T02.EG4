@@ -28,7 +28,7 @@ class ProductIdAttribute(Attribute):
             res = True
         else:
             raise OrderManagementException("Invalid EAN13 control digit")
-        return res
+        return attr_value
 
     @property
     def value(self):
