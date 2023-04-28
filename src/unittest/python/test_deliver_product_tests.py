@@ -144,6 +144,7 @@ class TestDeliverProduct(TestCase):
         with self.assertRaises(OrderManagementException) as context_manager:
             my_manager.deliver_product(
                 "847dfd443d86c9c222242010c11a44bd9a09c37b42b6e956db97ba173abefe83")
+        # We have changed the message to the following in order to unify them
         self.assertEqual(context_manager.exception.message, "tracking_code is not found")
 
     @freeze_time("2023-03-18")
