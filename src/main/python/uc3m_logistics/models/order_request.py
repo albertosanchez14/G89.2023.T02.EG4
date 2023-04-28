@@ -8,8 +8,6 @@ from uc3m_logistics.validation.delivery_address_attribute import DeliveryAddress
 from uc3m_logistics.validation.zip_code_attribute import ZipCodeAttribute
 from uc3m_logistics.validation.product_id_attribute import ProductIdAttribute
 from uc3m_logistics.stores.order_request_store import OrderRequestStore
-import time
-from freezegun import freeze_time
 
 
 class OrderRequest:
