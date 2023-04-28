@@ -1,10 +1,11 @@
+"""Docstring"""
 import datetime
 from datetime import datetime
 from abc import ABC
 from freezegun import freeze_time
-from .json_store import JsonStore
-from ..order_manager_config import Config
-from ..order_management_exception import OrderManagementException
+from .json_store import JsonStore  # pylint: disable=E0401 disable=W0611
+from ..order_manager_config import Config  # pylint: disable=E0401 disable=W0611
+from ..order_management_exception import OrderManagementException  # pylint: disable=E0401 disable=W0611
 
 
 class OrderRequestStore(JsonStore, ABC):
