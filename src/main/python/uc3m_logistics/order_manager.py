@@ -3,6 +3,7 @@ import datetime
 import re
 import json
 from datetime import datetime
+from .models.order_delivery import OrderDelivery
 from .models.order_request import OrderRequest
 from .order_management_exception import OrderManagementException
 from .models.order_shipping import OrderShipping
@@ -112,9 +113,9 @@ class OrderManager(metaclass=SingletonMetaClass):
         return order_shipping.tracking_code
 
     @staticmethod
-    def deliver_product(self, tracking_code):
+    def deliver_product(tracking_code):
         """Register the delivery of the product"""
-        self.validate_tracking_code(tracking_code)
+        """self.validate_tracking_code(tracking_code)
 
         # check if this tracking_code is in shipments_store
         shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
@@ -157,5 +158,8 @@ class OrderManager(metaclass=SingletonMetaClass):
             with open(shipments_file, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
         except FileNotFoundError as ex:
-            raise OrderManagementException("Wrong file or file path") from ex
+            raise OrderManagementException("Wrong file or file path") from ex"""
+
+        order_delivery = OrderDelivery.from_order_tracking_code(tracking_code)
+        order_delivery.save_to_store()
         return True

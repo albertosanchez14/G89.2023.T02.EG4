@@ -13,6 +13,7 @@ class OrderRequestStore(JsonStore, ABC):
 
     def find_item_by_key(self, key: str):
         """Find an item by key"""
+        self.data = self.load_store()
         found = False
         found_item: dict or None = None
         for item in self.data:
@@ -44,6 +45,7 @@ class OrderRequestStore(JsonStore, ABC):
 
     def add_item(self, new_item):
         """Add an item"""
+        self.data = self.load_store()
         found = False
         for item in self.data:
             if item["_OrderRequest__order_id"] == new_item.order_id:

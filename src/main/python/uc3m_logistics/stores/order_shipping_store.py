@@ -10,6 +10,7 @@ class OrderShippingStore(JsonStore, ABC):
 
     def find_item_by_key(self, key):
         """Find an item by key"""
+        self.data = self.load_store()
         for item in self.data:
             if item["_OrderShipping__tracking_code"] == key:
                 return item
@@ -17,5 +18,6 @@ class OrderShippingStore(JsonStore, ABC):
 
     def add_item(self, item):
         """Add an item"""
+        self.data = self.load_store()
         self.data.append(item.__dict__)
         self.save_store()

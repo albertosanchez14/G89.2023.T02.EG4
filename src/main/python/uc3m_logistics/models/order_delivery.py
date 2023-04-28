@@ -1,7 +1,6 @@
 """Docstring for this file"""
 from datetime import datetime
-
-from uc3m_logistics import OrderManagementException
+from uc3m_logistics.order_management_exception import OrderManagementException
 from uc3m_logistics.stores.order_delivery_store import OrderDeliveryStore
 from uc3m_logistics.stores.order_shipping_store import OrderShippingStore
 from uc3m_logistics.validation.tracking_code_attribute import TrackingCodeAttribute
